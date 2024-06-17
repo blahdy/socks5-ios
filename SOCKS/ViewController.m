@@ -19,6 +19,7 @@ extern int socks_main(int argc, const char** argv);
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view setBackgroundColor:[UIColor blackColor]];
 
     int port = 4884;
     
@@ -49,12 +50,18 @@ extern int socks_main(int argc, const char** argv);
     [self.audioPlayer setNumberOfLoops:-1];
     [self.audioPlayer prepareToPlay];
     [self.audioPlayer play];
+    
+    [self repositionLabelLoop];
 }
 
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)repositionLabelLoop {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        CGRect frame = self.statusLabel.frame;
+        frame.origin.y = (self.view.bounds.size.height / 2) + arc4random_uniform(400) - 200;
+        [self.statusLabel setFrame:frame];
+        [self repositionLabelLoop];
+    });
 }
 
 
